@@ -10,10 +10,28 @@ export function transformGraphQLObject(schema: GraphQLSchema, object: GraphQLObj
   const resolvedInterfaces = object instanceof GraphQLObjectType ? object.getInterfaces().map(inf => inf.name) : [];
   const directives = getDirectives(schema, object);
 
+  const __typename = [{
+    name: '__typename',
+    description: object.description || '',
+    arguments: [],
+    type: object.name,
+    isArray: false,
+    isRequired: false,
+    hasArguments: false,
+    isEnum: false,
+    isScalar: false,
+    isInterface: false,
+    isUnion: false,
+    isInputType: false,
+    isType: false,
+    directives: {},
+    usesDirectives: false,
+  }]
+
   return {
     name: object.name,
     description: object.description || '',
-    fields: resolvedFields,
+    fields: resolvedFields.concat(__typename),
     interfaces: resolvedInterfaces,
     isInputType: object instanceof GraphQLInputObjectType,
     hasFields: resolvedFields.length > 0,

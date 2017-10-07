@@ -9,6 +9,8 @@ import { getDirectives } from '../utils/get-directives';
 
 export function resolveFields(schema: GraphQLSchema, rawFields: GraphQLFieldMap<any, any>): Field[] {
   const fieldsArray = objectMapToArray<GraphQLField<any, any>>(rawFields);
+  // handle typename specifically. 
+
 
   return fieldsArray.map<Field>((item: { key: string, value: GraphQLField<any, any> }): Field => {
     const type = resolveType(item.value.type);
@@ -18,6 +20,8 @@ export function resolveFields(schema: GraphQLSchema, rawFields: GraphQLFieldMap<
     const directives = getDirectives(schema, item.value);
 
     debugLog(`[resolveFields] transformed field ${item.value.name} of type ${type}, resolved type is: `, type);
+
+  
 
     return {
       name: item.value.name,
